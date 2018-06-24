@@ -33,9 +33,9 @@ CUU is a project to help analyzing the usage of your app by providing functional
   s.source_files = 'CUU/Classes/**/*'
   s.swift_version = "4.0"
   
-#s.resource_bundles = {
-#  'CUU' => ['CUU/Assets/*.png']
-#  }
+  s.resource_bundles = {
+  'CUU' => ['CUU/Assets/*.png']
+  }
 
   # --- Subspecs --- #
 
@@ -51,6 +51,11 @@ CUU is a project to help analyzing the usage of your app by providing functional
   s.subspec 'InteractionKit' do |interactionkit|
     interactionkit.source_files = 'CUU/Classes/InteractionKit/**/*'
     interactionkit.dependency 'CUU/CUUCore'
+  end
+  
+  s.subspec 'ThinkingAloudKit' do |thinkingaloudkit|
+      thinkingaloudkit.source_files = 'CUU/Classes/ThinkingAloudKit/**/*'
+      thinkingaloudkit.dependency 'CUU/CUUCore'
   end
 
 end

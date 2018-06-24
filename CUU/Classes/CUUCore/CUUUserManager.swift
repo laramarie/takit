@@ -5,10 +5,11 @@
 //  Created by Lara Marie Reimer on 16.01.18.
 //
 
-
-
 import Foundation
 
+/**
+ *  Class for handling user data.
+ **/
 class CUUUserManager {
     static let sharedManager = CUUUserManager()
     
@@ -27,6 +28,17 @@ class CUUUserManager {
             UserDefaults.standard.set(uuid, forKey: CUUConstants.CUUUserDefaultsKeys.userIdKey)
             
             return uuid
+        }
+    }()
+    
+    let completedThinkingAloudFeatures : [String] = {
+        let features = UserDefaults.standard.object(forKey: CUUConstants.CUUUserDefaultsKeys.thinkingAloudFeaturesKey)
+        
+        if let features = features as? [String] {
+            // Return the stored features
+            return features
+        } else {
+            return []
         }
     }()
 }

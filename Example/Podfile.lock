@@ -3,10 +3,13 @@ PODS:
     - CUU/CUUCore (= 1.0.0)
     - CUU/FeatureKit (= 1.0.0)
     - CUU/InteractionKit (= 1.0.0)
+    - CUU/ThinkingAloudKit (= 1.0.0)
   - CUU/CUUCore (1.0.0)
   - CUU/FeatureKit (1.0.0):
     - CUU/CUUCore
   - CUU/InteractionKit (1.0.0):
+    - CUU/CUUCore
+  - CUU/ThinkingAloudKit (1.0.0):
     - CUU/CUUCore
 
 DEPENDENCIES:
@@ -17,7 +20,7 @@ EXTERNAL SOURCES:
     :path: ../
 
 SPEC CHECKSUMS:
-  CUU: fc53473d17cef3b151bf1f447e74104abe4e2854
+  CUU: a3fbc6c20b221cc1b890add97eb05d3735230b1b
 
 PODFILE CHECKSUM: bc8b24ecbdf770bf7541292965c5b507fc7cad87
 
