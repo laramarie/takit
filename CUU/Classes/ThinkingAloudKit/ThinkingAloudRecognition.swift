@@ -1,23 +1,26 @@
 //
-//  FKCrumb.swift
-//  CUU
+//  ThinkingAloudData.swift
+//  thinkingaloud
 //
-//  Created by Lara Marie Reimer on 10.12.17.
+//  Created by Lara Marie Reimer on 20.05.18.
+//  Copyright © 2018 Lara Marie Reimer. All rights reserved.
 //
 
 import Foundation
 
-public protocol CUUCrumb : Encodable {
-    var name: String { get }
-    var type: String { get }
-    var timestamp: Date { get }
+protocol ThinkingAloudRecognition: Encodable {
     var sessionId: String { get }
     var userId: String { get }
+    var featureId: String { get }
+    var previousCrumb: FKActionCrumb { get }
+    var content: String { get }
+    var timestamp: Date { get }
+    var analysis: String { get }
 }
 
-extension CUUCrumb {
+extension ThinkingAloudRecognition {
     /**
-     *   Public method to be called to send crumbs to the CUU database.
+     *   Public method to be called to send recognitions to the CUU database.
      **/
     func send() {
         if let projectId = CUUConstants.projectId, let commitHash = CUUConstants.commitHash, let trackingToken = CUUConstants.trackingToken {
@@ -26,7 +29,7 @@ extension CUUCrumb {
     }
     
     /**
-     *   Private method for handling crumb sending.
+     *   Private method for handling recognition sending.
      *   @param projectId: the project ID of the app in the CUU system.
      *   @param commitHash: The commit hash under which the version of the app was saved.
      *   @param trackingToken: The token to authenticate with the CUU system for storing data remotely.
@@ -34,7 +37,7 @@ extension CUUCrumb {
     private func sendToDatabase(projectId: String, commitHash: String, trackingToken: String) {
         // Construct the url.
         guard let baseUrl = CUUConstants.baseUrl else { return }
-        let urlString = baseUrl + "/v1/projects/" + projectId + "/commits/" + commitHash + "/crumbs"
+        let urlString = baseUrl + "/v1/projects/" + projectId + "/commits/" + commitHash + "/recognitions"
         let url = URL(string: urlString)
         
         // Create the url request.
@@ -50,7 +53,7 @@ extension CUUCrumb {
             let json = try encoder.encode(self)
             urlRequest.httpBody = json
         } catch _ {
-            print ("Error serializing crumb of type " + self.type)
+            print ("Error serializing recognition")
             return
         }
         

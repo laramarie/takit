@@ -12,7 +12,7 @@ class ThinkingAloudController : ThinkingAloudStartViewControllerDelegate, Thinki
     
     static let sharedManager = ThinkingAloudController()
     
-    let recognitionManager = RecognitionManager()
+    var recognitionManagers = [RecognitionManager]()
     
     var indicatorView : ThinkingAloudSessionIndicator = {
         let indicator = ThinkingAloudSessionIndicator()
@@ -26,8 +26,7 @@ class ThinkingAloudController : ThinkingAloudStartViewControllerDelegate, Thinki
     
     var isActive = false
     
-    var previousCrumb: CUUCrumb?
-    var nextCrumb: CUUCrumb?
+    var previousCrumb: FKActionCrumb?
     
     // MARK: - Lifecycle
     
@@ -50,7 +49,7 @@ class ThinkingAloudController : ThinkingAloudStartViewControllerDelegate, Thinki
             let featureId = payload["featureId"] as? String,
             let isFirst = payload["isFirst"] as? Bool,
             let isLast = payload["isLast"] as? Bool,
-            let crumb = payload["crumb"] as? CUUCrumb
+            let crumb = payload["crumb"] as? FKActionCrumb
         {
             if !featureArray.contains(featureId) {
                 if !isActive && isFirst && !isLast {
@@ -58,10 +57,13 @@ class ThinkingAloudController : ThinkingAloudStartViewControllerDelegate, Thinki
                     currentFeatureId = featureId
                     previousCrumb = crumb
                 } else {
-                    // TODO: Check if crumb belongs to currently executed feature
                     if featureId == currentFeatureId {
-                        stopRecording()
-                        startRecording()
+                        if (isLast) {
+                            stop()
+                        } else {
+                            stopRecording()
+                            startRecording()
+                        }
                     }
                 }
             }
@@ -94,16 +96,27 @@ class ThinkingAloudController : ThinkingAloudStartViewControllerDelegate, Thinki
     }
     
     func startRecording() {
-        recognitionManager.recordAndRecognizeSpeech()
+        let manager = RecognitionManager()
+        // Add it to managers array.
+        self.recognitionManagers.append(manager)
+        DispatchQueue.global().async {
+            manager.recordAndRecognizeSpeech()
+        }
     }
     
     func stopRecording() {
-        recognitionManager.stopRecording()
-        
-        if let previousCrumb = previousCrumb, let featureId = currentFeatureId {
-            //let dataObject = ThinkingAloudData(thinkingAloudSessionId: "abcde", featureId: featureId, previousCrumb: previousCrumb, nextCrumb: nextCrumb, content: recognitionManager.lastRecognition, timestamp: Date())
+        if let manager = recognitionManagers.first {
+            manager.stopRecording { (result) in
+                DispatchQueue.main.async {
+                    if let previousCrumb = self.previousCrumb, let featureId = self.currentFeatureId {
+                        let dataObject = DefaultThinkingAloudRecognition(featureId: featureId, previousCrumb: previousCrumb, content: result, analysis: "")
+                        dataObject.send()
+                    }
+                }
+            }
             
-            // TODO: Send this to CUU.
+            // Remove manager from array.
+            self.recognitionManagers.removeFirst()
         }
     }
     
@@ -154,7 +167,7 @@ class ThinkingAloudController : ThinkingAloudStartViewControllerDelegate, Thinki
     // MARK: - ThinkingAloudStartViewControllerDelegate
     
     func thinkingAloudStartViewControllerDidPressStart() {
-        recognitionManager.checkAuthorizationAndStart { (granted) in
+        RecognitionManager.checkAuthorizationAndStart { (granted) in
             if granted {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                     self.showSessionIndicator()

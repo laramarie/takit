@@ -43,7 +43,7 @@ class RecognitionManager {
         })
     }
     
-    func checkAuthorizationAndStart(with completion:@escaping (_ granted: Bool) -> Void) {
+    static func checkAuthorizationAndStart(with completion:@escaping (_ granted: Bool) -> Void) {
         SFSpeechRecognizer.requestAuthorization { authStatus in
             /* The callback may not be called on the main thread. Add an
              operation to the main queue to update the record button's state.
@@ -68,9 +68,14 @@ class RecognitionManager {
         }
     }
     
-    func stopRecording() {
+    func stopRecording(with completion:@escaping (_ result: String) -> Void) {
         audioEngine.stop()
         request.endAudio()
         recognitionTask?.finish()
+        
+        // Give it 3 seconds to finish.
+        DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
+            completion(self.lastRecognition)
+        }
     }
 }

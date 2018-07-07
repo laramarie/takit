@@ -11,7 +11,7 @@ import CUU
 
 class ViewController: UIViewController {
     @IBAction func didTapTryFeatureKitButton(_ sender: UIButton) {
-        FeatureKit.seed(name: "TryFeatureKitButtonTapAction")
+        CUU.seed(name: "TryFeatureKitButtonTapAction")
     }
     
 }

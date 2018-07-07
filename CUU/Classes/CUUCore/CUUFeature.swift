@@ -7,9 +7,8 @@
 
 import Foundation
 
-public protocol CUUFeature : Codable {
-    var name: String { get }
-    var id: String { get }
-    var crumbs: [CUUCrumb] { get }
-    var additionalActionTypes: [String]? { get }
+struct CUUFeature : Decodable {
+    let name: String
+    let id: Int
+    let steps: [String]
 }

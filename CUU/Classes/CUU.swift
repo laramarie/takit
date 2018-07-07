@@ -8,6 +8,10 @@ public class CUU {
         return ThinkingAloudKit()
     }
     
+    public static var featureKit: FeatureKit {
+        return FeatureKit()
+    }
+    
     // - MARK: Methods
     
     /**
@@ -15,6 +19,7 @@ public class CUU {
      */
     public static func start() {
         thinkingAloudKit.start()
+        featureKit.start()
     }
     
     /**
@@ -22,5 +27,16 @@ public class CUU {
      */
     public static func stop() {
         thinkingAloudKit.stop()
+    }
+    
+    /**
+     *   Open method to handle crumb saving.
+     *   @param name: the name of the crumb to be created and stored
+     **/
+    open static func seed(name: String) {
+        let actionCrumb = FKActionCrumb(name: name)
+        actionCrumb.send()
+        
+        featureKit.handleAdditionalCrumbActionsForFeatures(with: actionCrumb)
     }
 }

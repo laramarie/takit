@@ -12,35 +12,57 @@ import Foundation
  **/
 open class FeatureKit {
     
-    var activatedFeatures: [CUUFeature]?
+    var activatedFeatures: [CUUFeature]? = []
     
     public func start() {
         // Get all activated features for this commit version.
-        activatedFeatures = activatedFeaturesForCurrentCommit()
+        activatedFeaturesForCurrentCommit()
     }
     
-    /**
-    *   Open method to handle crumb saving.
-    *   @param name: the name of the crumb to be created and stored
-    **/
-    open static func seed(name: String) {
-        let actionCrumb = FKActionCrumb(name: name)
-        actionCrumb.send()
-        
-        
-    }
+    // MARK: Networking
     
-    func activatedFeaturesForCurrentCommit() -> [CUUFeature]? {
-        if let commit = CUUConstants.commitHash {
-            // TODO: Check for activated features in the database.
+    /*
+    *   Method for retrieving activated features for the database.
+    */
+    func activatedFeaturesForCurrentCommit() {
+        if let projectId = CUUConstants.projectId, let commitHash = CUUConstants.commitHash, let trackingToken = CUUConstants.trackingToken, let baseUrl = CUUConstants.baseUrl {
+            // Construct the url.
+            let urlString = baseUrl + "/v1/projects/" + projectId + "/commits/" + commitHash + "/activatedFeatures"
+            let url = URL(string: urlString)
             
-            return []
+            // Create the url request.
+            var urlRequest = URLRequest(url: url!)
+            urlRequest.httpMethod = "GET"
+            urlRequest.setValue(trackingToken, forHTTPHeaderField: "X-Tracking-Token")
+            urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
+            
+            // Send the request.
+            let task = URLSession.shared.dataTask(with: urlRequest) { (data, response, error) in
+                if let data = data {
+                    // Try to serialize crumb data.
+                    do {
+                        let decoder = JSONDecoder()
+                        let features = try decoder.decode([CUUFeature].self, from: data)
+                        self.activatedFeatures = features
+                        print(self.activatedFeatures)
+                    } catch {
+                        print(error)
+                    }
+                } else {
+                    print(error as Any)
+                }
+            }
+            task.resume()
         }
-        
-        return nil
     }
     
-    func handleAdditionalCrumbActionsForFeatures(with crumb: CUUCrumb) {
+    // MARK: Helper Methods
+    
+    /*
+    *   Checks if any action needs to be performed for the triggered crumb.
+    *   @parameter crumb: the crumb fo which this action should be performed.
+    */
+    func handleAdditionalCrumbActionsForFeatures(with crumb: FKActionCrumb) {
         // Check if any additional actions should be performed on CUU.
         if let correspondingActivatedFeature = feature(for: crumb) {
             // Dispatch a notification that a new feature crumb was triggered.
@@ -54,11 +76,11 @@ open class FeatureKit {
         }
     }
     
-    func feature(for crumb: CUUCrumb) -> CUUFeature? {
+    func feature(for crumb: FKActionCrumb) -> CUUFeature? {
         if let activatedFeatures = self.activatedFeatures {
             for feature in activatedFeatures {
-                for featureCrumb in feature.crumbs {
-                    if featureCrumb.name == crumb.name {
+                for featureCrumb in feature.steps {
+                    if featureCrumb == crumb.name {
                         return feature
                     }
                 }
@@ -67,15 +89,15 @@ open class FeatureKit {
         return nil
     }
     
-    func isFirst(crumb: CUUCrumb, in feature: CUUFeature) -> Bool {
-        if feature.crumbs.count > 0 && feature.crumbs.first?.name == crumb.name {
+    func isFirst(crumb: FKActionCrumb, in feature: CUUFeature) -> Bool {
+        if feature.steps.count > 0 && feature.steps.first == crumb.name {
             return true
         }
         return false
     }
     
-    func isLast(crumb: CUUCrumb, in feature: CUUFeature) -> Bool {
-        if feature.crumbs.count > 0 && feature.crumbs.last?.name == crumb.name {
+    func isLast(crumb: FKActionCrumb, in feature: CUUFeature) -> Bool {
+        if feature.steps.count > 0 && feature.steps.last == crumb.name {
             return true
         }
         return false
