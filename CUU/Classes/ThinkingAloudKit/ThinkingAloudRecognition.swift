@@ -12,7 +12,7 @@ protocol ThinkingAloudRecognition: Encodable {
     var sessionId: String { get }
     var userId: String { get }
     var featureId: String { get }
-    var previousCrumb: FKActionCrumb { get }
+    var previousCrumbId: String { get }
     var content: String { get }
     var timestamp: Date { get }
     var analysis: String { get }

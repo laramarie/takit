@@ -18,6 +18,12 @@ class ThinkingAloudStartViewController: UIViewController, ThinkingAloudStartView
     
     weak var delegate: ThinkingAloudStartViewControllerDelegate?
     
+    var featureTitle : String = "" {
+        didSet {
+            thinkingAloudStartView.featureTitle = featureTitle
+        }
+    }
+    
     // MARK: Lifecycle
     
     override func viewDidLoad() {

@@ -66,13 +66,12 @@ open class FeatureKit {
         // Check if any additional actions should be performed on CUU.
         if let correspondingActivatedFeature = feature(for: crumb) {
             // Dispatch a notification that a new feature crumb was triggered.
-            let payload = ["crumb": crumb,
+            let payload = ["crumbId": crumb.id,
                            "isFirst": isFirst(crumb: crumb, in: correspondingActivatedFeature),
                            "isLast": isLast(crumb: crumb, in: correspondingActivatedFeature),
-                           "featureId": correspondingActivatedFeature.id
+                           "feature": correspondingActivatedFeature
                 ] as [String : Any]
-            let notification = Notification.init(name: Notification.Name(rawValue: "de.tum.in.ase.cuu.featurekit.didTriggerFeatureCrumb"), object: nil, userInfo: payload)
-            NotificationCenter.default.post(notification)
+            NotificationCenter.default.post(name: .didTriggerCrumb, object: nil, userInfo: payload)
         }
     }
     

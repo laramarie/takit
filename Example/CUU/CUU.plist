@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>CUUApiEndpoint</key>
-	<string>http://localhost:8080/api</string>
+	<string>http://Gryffindor.fritz.box:8080/api</string>
 	<key>CUUTrackingToken</key>
 	<string>fd229115-a951-46a2-9b83-e910291822a7</string>
 	<key>CUUCommitHash</key>

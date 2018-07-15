@@ -8,8 +8,10 @@
 import Foundation
 
 public class ThinkingAloudKit {
+    
+    let controller = ThinkingAloudController()
+    
     public func start() {
-        // TODO: Check for activated features
         
     }
     

@@ -11,16 +11,16 @@ struct DefaultThinkingAloudRecognition: ThinkingAloudRecognition {
     let sessionId: String
     let userId: String
     let featureId: String
-    let previousCrumb: FKActionCrumb
+    let previousCrumbId: String
     let content: String
     let timestamp: Date
     let analysis: String
     
-    init(featureId: String, previousCrumb: FKActionCrumb, content: String, analysis: String) {
+    init(featureId: String, previousCrumbId: String, content: String, analysis: String) {
         self.sessionId = "abcde"
         self.userId = CUUUserManager.sharedManager.userId
         self.featureId = featureId
-        self.previousCrumb = previousCrumb
+        self.previousCrumbId = previousCrumbId
         self.content = content
         self.timestamp = Date()
         self.analysis = "{}"

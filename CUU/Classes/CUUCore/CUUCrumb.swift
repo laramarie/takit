@@ -8,6 +8,7 @@
 import Foundation
 
 public protocol CUUCrumb : Encodable {
+    var id: String { get }
     var name: String { get }
     var type: String { get }
     var timestamp: Date { get }

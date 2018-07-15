@@ -53,7 +53,7 @@ class RecognitionManager {
                 case .authorized:
                     let synth = AVSpeechSynthesizer()
                     let myUtterance = AVSpeechUtterance(string: "We're ready to start! Start talking now.")
-                    myUtterance.rate = 0.3
+                    myUtterance.rate = 0.5
                     synth.speak(myUtterance)
                     
                     completion(true)
@@ -68,14 +68,15 @@ class RecognitionManager {
         }
     }
     
-    func stopRecording(with completion:@escaping (_ result: String) -> Void) {
-        audioEngine.stop()
-        request.endAudio()
-        recognitionTask?.finish()
-        
-        // Give it 3 seconds to finish.
-        DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
-            completion(self.lastRecognition)
+    func stopRecording(isLast: Bool, with completion:@escaping (_ result: String) -> Void) {
+        // Give it 1 seconds to finish.
+        DispatchQueue.main.asyncAfter(deadline: .now() + (isLast ? 3.0 : 0.5)) {
+            self.audioEngine.stop()
+            self.request.endAudio()
+            DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) {
+                self.recognitionTask?.finish()
+                completion(self.lastRecognition)
+            }
         }
     }
 }

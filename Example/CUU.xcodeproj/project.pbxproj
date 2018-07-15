@@ -14,6 +14,9 @@
 		607FACEC1AFB9204008FA782 /* Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACEB1AFB9204008FA782 /* Tests.swift */; };
 		6D897C8EB1716DCE2DCC22F7 /* Pods_CUU_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 52DD522C5462A681D0003B94 /* Pods_CUU_Tests.framework */; };
 		758CA677AAE1F9BC92B0F02E /* Pods_CUU_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E2353057216154182A29EC56 /* Pods_CUU_Example.framework */; };
+		8F99943B20F257710043EF2C /* ImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F99943A20F257710043EF2C /* ImageViewController.swift */; };
+		8F99943D20F2577D0043EF2C /* DoneViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F99943C20F2577D0043EF2C /* DoneViewController.swift */; };
+		8FE2F3A620FC02EC005F54BB /* avatar.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 8FE2F3A520FC02EB005F54BB /* avatar.jpg */; };
 		8FF8A20E200B8A6700E04EB7 /* CUU.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8FF8A20D200B8A6700E04EB7 /* CUU.plist */; };
 /* End PBXBuildFile section */
 
@@ -43,6 +46,9 @@
 		607FACEB1AFB9204008FA782 /* Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tests.swift; sourceTree = "<group>"; };
 		738FE0B22489755319DBA3DC /* Pods-CUU_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CUU_Example.release.xcconfig"; path = "Pods/Target Support Files/Pods-CUU_Example/Pods-CUU_Example.release.xcconfig"; sourceTree = "<group>"; };
 		749362C8860E6128BCA83CB4 /* Pods-CUU_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CUU_Tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-CUU_Tests/Pods-CUU_Tests.debug.xcconfig"; sourceTree = "<group>"; };
+		8F99943A20F257710043EF2C /* ImageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageViewController.swift; sourceTree = "<group>"; };
+		8F99943C20F2577D0043EF2C /* DoneViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DoneViewController.swift; sourceTree = "<group>"; };
+		8FE2F3A520FC02EB005F54BB /* avatar.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = avatar.jpg; sourceTree = "<group>"; };
 		8FF8A20D200B8A6700E04EB7 /* CUU.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = CUU.plist; sourceTree = "<group>"; };
 		9B979EE06DD7791EE3E80E30 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
 		A2ACAED389B6F796D404F6CB /* Pods-CUU_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CUU_Example.debug.xcconfig"; path = "Pods/Target Support Files/Pods-CUU_Example/Pods-CUU_Example.debug.xcconfig"; sourceTree = "<group>"; };
@@ -106,8 +112,11 @@
 			children = (
 				607FACD51AFB9204008FA782 /* AppDelegate.swift */,
 				607FACD71AFB9204008FA782 /* ViewController.swift */,
+				8F99943A20F257710043EF2C /* ImageViewController.swift */,
+				8F99943C20F2577D0043EF2C /* DoneViewController.swift */,
 				607FACD91AFB9204008FA782 /* Main.storyboard */,
 				607FACDC1AFB9204008FA782 /* Images.xcassets */,
+				8FE2F3A520FC02EB005F54BB /* avatar.jpg */,
 				607FACD31AFB9204008FA782 /* Supporting Files */,
 			);
 			name = "Example for CUU";
@@ -250,6 +259,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8FE2F3A620FC02EC005F54BB /* avatar.jpg in Resources */,
 				607FACDB1AFB9204008FA782 /* Main.storyboard in Resources */,
 				607FACDD1AFB9204008FA782 /* Images.xcassets in Resources */,
 				8FF8A20E200B8A6700E04EB7 /* CUU.plist in Resources */,
@@ -372,7 +382,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8F99943D20F2577D0043EF2C /* DoneViewController.swift in Sources */,
 				607FACD81AFB9204008FA782 /* ViewController.swift in Sources */,
+				8F99943B20F257710043EF2C /* ImageViewController.swift in Sources */,
 				607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -18,6 +18,12 @@ class ThinkingAloudStartView: UIView {
     
     // MARK: Properties
     
+    var featureTitle: String = "" {
+        didSet {
+            contentLabel.text = "We saw that you started our feature \"\(featureTitle)\".\n\n We are always looking for your opinion. Do you want to start a \"Thinking Aloud\" feedback run now?"
+        }
+    }
+    
     var didSetupConstraints = false
     
     weak var delegate : ThinkingAloudStartViewDelegate?
@@ -104,7 +110,12 @@ class ThinkingAloudStartView: UIView {
         let image = UIImageView()
         image.backgroundColor = UIColor.clear
         image.translatesAutoresizingMaskIntoConstraints = false
-        image.image = UIImage(named: "voice-recorder.png")
+        
+        let bundle = Bundle(for: ThinkingAloudStartView.self)
+        if let url = bundle.url(forResource: "CUU",
+                                withExtension: "bundle"), let bundle = Bundle(url: url) {
+            image.image = UIImage(named: "voice-recorder.png", in: bundle, compatibleWith: nil)
+        }
         
         view.addSubview(image)
         
@@ -126,7 +137,6 @@ class ThinkingAloudStartView: UIView {
         label.font = UIFont.systemFont(ofSize: 17.0)
         label.textAlignment = .center
         label.numberOfLines = 0
-        label.text = "We saw that you started one of our features.\n\n We are always looking for your opinion. Do you want to start a \"Thinking Aloud\" feedback run now?"
         return label
     }()
     

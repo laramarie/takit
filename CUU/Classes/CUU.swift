@@ -4,13 +4,12 @@ public class CUU {
     /**
      * The shared ThinkingAloudKit instance.
      */
-    public static var thinkingAloudKit: ThinkingAloudKit {
-        return ThinkingAloudKit()
-    }
+    public static let thinkingAloudKit = ThinkingAloudKit()
     
-    public static var featureKit: FeatureKit {
-        return FeatureKit()
-    }
+    /**
+     * The shared FeatureKit instance.
+     */
+    public static let featureKit = FeatureKit()
     
     // - MARK: Methods
     

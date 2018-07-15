@@ -6,11 +6,10 @@
 //  Copyright © 2018 Lara Marie Reimer. All rights reserved.
 //
 
+import Foundation
 import UIKit
 
 class ThinkingAloudController : ThinkingAloudStartViewControllerDelegate, ThinkingAloudSessionIndicatorDelegate {
-    
-    static let sharedManager = ThinkingAloudController()
     
     var recognitionManagers = [RecognitionManager]()
     
@@ -22,47 +21,48 @@ class ThinkingAloudController : ThinkingAloudStartViewControllerDelegate, Thinki
     
     var indicatorTopConstraint = NSLayoutConstraint()
     
-    var currentFeatureId: String?
+    var currentFeature: CUUFeature?
     
     var isActive = false
     
-    var previousCrumb: FKActionCrumb?
+    var previousCrumbId: String?
     
     // MARK: - Lifecycle
     
     init() {
         // Register observer for feature crumbs.
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(self.crumbReceived),
-            name: NSNotification.Name(rawValue: "io.reimer.thinkingaloud.didUpdateRecognitionText"),
-            object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(crumbReceived(notification:)), name: .didTriggerCrumb, object: nil)
     }
     
     // MARK: - Thinking Aloud Run Controlling
-    
+
     @objc func crumbReceived(notification: NSNotification) {
         let payload = notification.userInfo
         
         let featureArray = CUUUserManager.sharedManager.completedThinkingAloudFeatures
         if let payload = payload,
-            let featureId = payload["featureId"] as? String,
+            let feature = payload["feature"] as? CUUFeature,
             let isFirst = payload["isFirst"] as? Bool,
             let isLast = payload["isLast"] as? Bool,
-            let crumb = payload["crumb"] as? FKActionCrumb
+            let crumbId = payload["crumbId"] as? String
         {
-            if !featureArray.contains(featureId) {
+            if (true) { //!featureArray.contains(String(feature.id)) {
                 if !isActive && isFirst && !isLast {
-                    start()
-                    currentFeatureId = featureId
-                    previousCrumb = crumb
+                    DispatchQueue.main.asyncAfter(deadline: .now()) {
+                        self.start()
+                    }
+                    currentFeature = feature
+                    previousCrumbId = crumbId
                 } else {
-                    if featureId == currentFeatureId {
-                        if (isLast) {
-                            stop()
-                        } else {
-                            stopRecording()
-                            startRecording()
+                    if let currentFeature = currentFeature {
+                        if feature.id == currentFeature.id {
+                            if (isLast) {
+                                print(isLast)
+                                stop()
+                            } else {
+                                stopRecording(isLast: false)
+                                startRecording()
+                            }
                         }
                     }
                 }
@@ -71,9 +71,12 @@ class ThinkingAloudController : ThinkingAloudStartViewControllerDelegate, Thinki
     }
     
     func start() {
+        guard let feature = currentFeature else { return }
+        
         let startVC = ThinkingAloudStartViewController()
         startVC.modalPresentationStyle = .overFullScreen
         startVC.delegate = self
+        startVC.featureTitle = feature.name
         let currentVC = CUUUtils.getTopViewController()
         currentVC?.present(startVC, animated: true, completion: nil)
         
@@ -83,14 +86,14 @@ class ThinkingAloudController : ThinkingAloudStartViewControllerDelegate, Thinki
     func stop() {
         animateInOut(animateIn: false)
         
-        self.stopRecording()
+        self.stopRecording(isLast: true)
         
         isActive = false
         
         // Store it in user defaults
-        if let id = currentFeatureId {
+        if let id = currentFeature?.id {
             var featureArray = CUUUserManager.sharedManager.completedThinkingAloudFeatures
-            featureArray.append(id)
+            featureArray.append(String(id))
             UserDefaults.standard.set(featureArray, forKey: CUUConstants.CUUUserDefaultsKeys.thinkingAloudFeaturesKey)
         }
     }
@@ -104,19 +107,18 @@ class ThinkingAloudController : ThinkingAloudStartViewControllerDelegate, Thinki
         }
     }
     
-    func stopRecording() {
+    func stopRecording(isLast: Bool) {
         if let manager = recognitionManagers.first {
-            manager.stopRecording { (result) in
+            manager.stopRecording(isLast: isLast, with: { (result) in
                 DispatchQueue.main.async {
-                    if let previousCrumb = self.previousCrumb, let featureId = self.currentFeatureId {
-                        let dataObject = DefaultThinkingAloudRecognition(featureId: featureId, previousCrumb: previousCrumb, content: result, analysis: "")
+                    if let previousCrumbId = self.previousCrumbId, let feature = self.currentFeature {
+                        let dataObject = DefaultThinkingAloudRecognition(featureId: String(feature.id), previousCrumbId: previousCrumbId, content: result, analysis: "")
                         dataObject.send()
                     }
                 }
-            }
-            
-            // Remove manager from array.
-            self.recognitionManagers.removeFirst()
+                // Remove manager from array.
+                self.recognitionManagers.removeFirst()
+            })
         }
     }
     
@@ -169,7 +171,7 @@ class ThinkingAloudController : ThinkingAloudStartViewControllerDelegate, Thinki
     func thinkingAloudStartViewControllerDidPressStart() {
         RecognitionManager.checkAuthorizationAndStart { (granted) in
             if granted {
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                     self.showSessionIndicator()
                 }
                 self.startRecording()

@@ -39,9 +39,9 @@ CUU is a project to help analyzing the usage of your app by providing functional
 
   # --- Subspecs --- #
 
-    s.subspec 'CUUCore' do |cuucore|
+  s.subspec 'CUUCore' do |cuucore|
     cuucore.source_files = 'CUU/Classes/CUUCore/**/*'
-    end
+  end
 
   s.subspec 'FeatureKit' do |featurekit|
     featurekit.source_files = 'CUU/Classes/FeatureKit/**/*'
@@ -54,8 +54,9 @@ CUU is a project to help analyzing the usage of your app by providing functional
   end
   
   s.subspec 'ThinkingAloudKit' do |thinkingaloudkit|
-      thinkingaloudkit.source_files = 'CUU/Classes/ThinkingAloudKit/**/*'
-      thinkingaloudkit.dependency 'CUU/CUUCore'
+    thinkingaloudkit.source_files = 'CUU/Classes/ThinkingAloudKit/**/*'
+    thinkingaloudkit.dependency 'CUU/CUUCore'
+    thinkingaloudkit.dependency 'CUU/FeatureKit'
   end
 
 end

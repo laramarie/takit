@@ -11,6 +11,7 @@ PODS:
     - CUU/CUUCore
   - CUU/ThinkingAloudKit (1.0.0):
     - CUU/CUUCore
+    - CUU/FeatureKit
 
 DEPENDENCIES:
   - CUU (from `../`)
@@ -20,7 +21,7 @@ EXTERNAL SOURCES:
     :path: ../
 
 SPEC CHECKSUMS:
-  CUU: a3fbc6c20b221cc1b890add97eb05d3735230b1b
+  CUU: d521c85525648252e988c5f2e7af05d006b49d97
 
 PODFILE CHECKSUM: bc8b24ecbdf770bf7541292965c5b507fc7cad87
 
