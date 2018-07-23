@@ -11,6 +11,8 @@ import Speech
 
 class RecognitionManager {
     
+    var previousCrumbId = ""
+    
     let speechRecognizer: SFSpeechRecognizer? = SFSpeechRecognizer()
     let request = SFSpeechAudioBufferRecognitionRequest()
     var recognitionTask: SFSpeechRecognitionTask?
@@ -52,7 +54,7 @@ class RecognitionManager {
                 switch authStatus {
                 case .authorized:
                     let synth = AVSpeechSynthesizer()
-                    let myUtterance = AVSpeechUtterance(string: "We're ready to start! Start talking now.")
+                    let myUtterance = AVSpeechUtterance(string: "Los gehts! Fang an zu reden.")
                     myUtterance.rate = 0.5
                     synth.speak(myUtterance)
                     
@@ -69,12 +71,18 @@ class RecognitionManager {
     }
     
     func stopRecording(isLast: Bool, with completion:@escaping (_ result: String) -> Void) {
-        // Give it 1 seconds to finish.
-        DispatchQueue.main.asyncAfter(deadline: .now() + (isLast ? 3.0 : 0.5)) {
+        // Give it 1 second to finish.
+        DispatchQueue.main.asyncAfter(deadline: .now() + (isLast ? 5.0 : 1.5)) {
             self.audioEngine.stop()
             self.request.endAudio()
             DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) {
                 self.recognitionTask?.finish()
+                
+                let analyzer = RecognitionAnalyzer(with: self.lastRecognition)
+                analyzer.analyze(with: { (token, result) in
+                    print(token, result)
+                })
+                
                 completion(self.lastRecognition)
             }
         }

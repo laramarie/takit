@@ -35,7 +35,7 @@ class ThinkingAloudController : ThinkingAloudStartViewControllerDelegate, Thinki
     }
     
     // MARK: - Thinking Aloud Run Controlling
-
+    
     @objc func crumbReceived(notification: NSNotification) {
         let payload = notification.userInfo
         
@@ -44,23 +44,23 @@ class ThinkingAloudController : ThinkingAloudStartViewControllerDelegate, Thinki
             let feature = payload["feature"] as? CUUFeature,
             let isFirst = payload["isFirst"] as? Bool,
             let isLast = payload["isLast"] as? Bool,
-            let crumbId = payload["crumbId"] as? String
-        {
+            let crumbId = payload["crumbId"] as? String {
             if (true) { //!featureArray.contains(String(feature.id)) {
                 if !isActive && isFirst && !isLast {
                     DispatchQueue.main.asyncAfter(deadline: .now()) {
+                        self.currentFeature = feature
+                        self.previousCrumbId = crumbId
                         self.start()
                     }
-                    currentFeature = feature
-                    previousCrumbId = crumbId
                 } else {
                     if let currentFeature = currentFeature {
                         if feature.id == currentFeature.id {
                             if (isLast) {
-                                print(isLast)
                                 stop()
+                                previousCrumbId = crumbId
                             } else {
                                 stopRecording(isLast: false)
+                                previousCrumbId = crumbId
                                 startRecording()
                             }
                         }
@@ -100,6 +100,9 @@ class ThinkingAloudController : ThinkingAloudStartViewControllerDelegate, Thinki
     
     func startRecording() {
         let manager = RecognitionManager()
+        if let id = previousCrumbId {
+            manager.previousCrumbId = id
+        }
         // Add it to managers array.
         self.recognitionManagers.append(manager)
         DispatchQueue.global().async {
@@ -108,17 +111,29 @@ class ThinkingAloudController : ThinkingAloudStartViewControllerDelegate, Thinki
     }
     
     func stopRecording(isLast: Bool) {
-        if let manager = recognitionManagers.first {
-            manager.stopRecording(isLast: isLast, with: { (result) in
-                DispatchQueue.main.async {
-                    if let previousCrumbId = self.previousCrumbId, let feature = self.currentFeature {
-                        let dataObject = DefaultThinkingAloudRecognition(featureId: String(feature.id), previousCrumbId: previousCrumbId, content: result, analysis: "")
-                        dataObject.send()
+        for (index, manager) in recognitionManagers.enumerated() {
+            if manager.previousCrumbId == previousCrumbId {
+                manager.stopRecording(isLast: isLast, with: { (result) in
+                    DispatchQueue.main.async {
+                        if let previousCrumbId = self.previousCrumbId, let feature = self.currentFeature {
+                            let dataObject = DefaultThinkingAloudRecognition(featureId: String(feature.id), previousCrumbId: previousCrumbId, content: result, analysis: "")
+                            dataObject.send()
+                        }
+                        
+                        if isLast {
+                            let alert = UIAlertController(title: "Du bist fertig!", message: "Danke für dein Feedback!", preferredStyle: .alert)
+                            alert.addAction(UIAlertAction(title: "Okay", style: .default, handler: nil))
+                            
+                            if let currentVC = CUUUtils.getTopViewController() {
+                                currentVC.present(alert, animated: true, completion: nil)
+                            }
+                        }
                     }
-                }
-                // Remove manager from array.
-                self.recognitionManagers.removeFirst()
-            })
+                    // Remove manager from array.
+                    self.recognitionManagers.remove(at: index)
+                })
+                break
+            }
         }
     }
     

@@ -36,7 +36,7 @@ CUU is a project to help analyzing the usage of your app by providing functional
   s.resource_bundles = {
   'CUU' => ['CUU/Assets/*.png']
   }
-
+  
   # --- Subspecs --- #
 
   s.subspec 'CUUCore' do |cuucore|
@@ -57,6 +57,7 @@ CUU is a project to help analyzing the usage of your app by providing functional
     thinkingaloudkit.source_files = 'CUU/Classes/ThinkingAloudKit/**/*'
     thinkingaloudkit.dependency 'CUU/CUUCore'
     thinkingaloudkit.dependency 'CUU/FeatureKit'
+    thinkingaloudkit.preserve_paths = 'CUU/Classes/ThinkingAloudKit/*.mlmodel'
   end
 
 end
