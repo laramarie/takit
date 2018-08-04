@@ -64,7 +64,7 @@ class ThinkingAloudStartView: UIView {
             let centerImageX = NSLayoutConstraint(item: imageView, attribute: .centerX, relatedBy:.equal, toItem: backgroundView, attribute: .centerX, multiplier: 1.0, constant: 1.0)
             let widthImage = NSLayoutConstraint.constraints(withVisualFormat: "H:[image(51)]", options: NSLayoutFormatOptions(rawValue: 0),metrics: nil, views: viewsDictionary)
             let centerContentX = NSLayoutConstraint.constraints(withVisualFormat: "H:|-10-[content]-10-|", options: NSLayoutFormatOptions(rawValue: 0),metrics: nil, views: viewsDictionary)
-            let hConstraintsButton = NSLayoutConstraint.constraints(withVisualFormat: "H:|-40-[deny]-(>=10@750)-[go]-40-|", options: NSLayoutFormatOptions(rawValue: 0),metrics: nil, views: viewsDictionary)
+            let hConstraintsButton = NSLayoutConstraint.constraints(withVisualFormat: "H:|-20-[deny]-(>=10@750)-[go]-20-|", options: NSLayoutFormatOptions(rawValue: 0),metrics: nil, views: viewsDictionary)
             let vConstraints = NSLayoutConstraint.constraints(withVisualFormat: "V:|-20-[title]-20-[image(51)]-20-[content]-30-[deny]-20-|", options: NSLayoutFormatOptions(rawValue: 0),metrics: nil, views: viewsDictionary)
             let vConstraintsGo = NSLayoutConstraint.constraints(withVisualFormat: "V:[go]-20-|", options: NSLayoutFormatOptions(rawValue: 0),metrics: nil, views: viewsDictionary)
             
@@ -147,7 +147,7 @@ class ThinkingAloudStartView: UIView {
         button.setTitle("Go!", for: UIControlState.normal)
         button.backgroundColor = #colorLiteral(red: 0.2392156869, green: 0.6745098233, blue: 0.9686274529, alpha: 1)
         button.layer.cornerRadius = 15.0
-        button.titleLabel?.font = UIFont.systemFont(ofSize: 17.0)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 15.0)
         button.contentEdgeInsets = UIEdgeInsetsMake(10.0, 35.0, 10.0, 35.0)
         return button
     }()
@@ -158,7 +158,7 @@ class ThinkingAloudStartView: UIView {
         button.setTitle("No, thanks", for: UIControlState.normal)
         button.backgroundColor = #colorLiteral(red: 0.501960814, green: 0.501960814, blue: 0.501960814, alpha: 1)
         button.layer.cornerRadius = 15.0
-        button.titleLabel?.font = UIFont.systemFont(ofSize: 17.0)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 15.0)
         button.contentEdgeInsets = UIEdgeInsetsMake(10.0, 10.0, 10.0, 10.0)
         button.addTarget(self, action: #selector(didTapDenyButton), for: .touchUpInside)
         return button

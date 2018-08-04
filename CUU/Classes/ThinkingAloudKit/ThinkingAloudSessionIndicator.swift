@@ -21,7 +21,7 @@ class ThinkingAloudSessionIndicator : UIView {
     var indicator : UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = #colorLiteral(red: 0.7450980544, green: 0.1568627506, blue: 0.07450980693, alpha: 1)
+        view.backgroundColor = UIColor.red.withAlphaComponent(0.5)
         return view
     }()
     
@@ -83,7 +83,7 @@ class ThinkingAloudSessionIndicator : UIView {
             // AutoLayout constraints
             didSetupConstraints = true
             
-            var topSafeArea = CGFloat(10)
+            var topSafeArea = CGFloat(17)
             
             if #available(iOS 11.0, *) {
                 let window = UIApplication.shared.keyWindow
@@ -101,7 +101,7 @@ class ThinkingAloudSessionIndicator : UIView {
             let hConstraintsBackground = NSLayoutConstraint.constraints(withVisualFormat: "H:|[background]|", options: NSLayoutFormatOptions(rawValue: 0), metrics: nil, views: viewsDictionary)
             let vConstraintsBackground = NSLayoutConstraint.constraints(withVisualFormat: "V:|[background]|", options: NSLayoutFormatOptions(rawValue: 0), metrics: nil, views: viewsDictionary)
             let hConstraintsContent = NSLayoutConstraint.constraints(withVisualFormat: "H:|-10-[image(17)]-(>=10)-[text]-(>=10)-[abort(17)]-10-|", options: NSLayoutFormatOptions(rawValue: 0),metrics: nil, views: viewsDictionary)
-            let heightImage = NSLayoutConstraint.constraints(withVisualFormat: "V:|-top-[image(17)]-|", options: NSLayoutFormatOptions(rawValue: 0), metrics: metrics, views: viewsDictionary)
+            let heightImage = NSLayoutConstraint.constraints(withVisualFormat: "V:|-top-[image(17)]-4-|", options: NSLayoutFormatOptions(rawValue: 0), metrics: metrics, views: viewsDictionary)
             let heightButton = NSLayoutConstraint.constraints(withVisualFormat: "V:|-top-[abort(17)]", options: NSLayoutFormatOptions(rawValue: 0), metrics: metrics, views: viewsDictionary)
             let centerTextX = NSLayoutConstraint(item: text, attribute: .centerX, relatedBy:.equal, toItem: indicator, attribute: .centerX, multiplier: 1.0, constant: 1.0)
             let centerTextY = NSLayoutConstraint(item: text, attribute: .centerY, relatedBy:.equal, toItem: abort, attribute: .centerY, multiplier: 1.0, constant: 1.0)

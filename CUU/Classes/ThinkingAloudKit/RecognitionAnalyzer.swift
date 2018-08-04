@@ -14,7 +14,7 @@ class RecognitionAnalyzer {
         self.content = content
     }
     
-    func analyze(with completion:@escaping (_ result: String, _ prediction: String) -> Void) {
+    func analyze(with completion:@escaping (_ result: String, _ prediction: String, _ isLast: Bool) -> Void) {
         // First, break the content down into sentences.
         let tagger = NSLinguisticTagger(tagSchemes: [.tokenType], options: 0)
         tagger.string = content
@@ -26,18 +26,17 @@ class RecognitionAnalyzer {
             tagger.enumerateTags(in: range, unit: .sentence, scheme: .tokenType, options: options) { tag, tokenRange, stop in
                 
                 let token = (content as NSString).substring(with: tokenRange)
-                print(token)
+                let isLast = tokenRange.contains(content.count - 1)
                 
-                let prediction = ""
+                var prediction = ""
                 do {
-                    let prediction = try SentenceClassifier_TA().prediction(Content: bow(text: token)).Classified
-                    print(prediction)
+                    prediction = try SentenceClassifierTA().prediction(Content: bow(text: token)).Classified
                 } catch {
                     print("Error prediction token: " + token)
                 }
                 
                 // Do something with each token
-                completion(token, prediction)
+                completion(token, prediction, isLast)
             }
         }
     }

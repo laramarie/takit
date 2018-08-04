@@ -70,7 +70,7 @@ class RecognitionManager {
         }
     }
     
-    func stopRecording(isLast: Bool, with completion:@escaping (_ result: String) -> Void) {
+    func stopRecording(isLast: Bool, with completion:@escaping (_ result: String, _ analyzedResult: [String : String]) -> Void) {
         // Give it 1 second to finish.
         DispatchQueue.main.asyncAfter(deadline: .now() + (isLast ? 5.0 : 1.5)) {
             self.audioEngine.stop()
@@ -78,12 +78,19 @@ class RecognitionManager {
             DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) {
                 self.recognitionTask?.finish()
                 
-                let analyzer = RecognitionAnalyzer(with: self.lastRecognition)
-                analyzer.analyze(with: { (token, result) in
-                    print(token, result)
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1.0, execute: {
+                    var analyzedResult : [String : String] = [:]
+                    
+                    let analyzer = RecognitionAnalyzer(with: self.lastRecognition)
+                    analyzer.analyze(with: { (token, result, isLast) in
+                        analyzedResult[token] = result
+                        print(analyzedResult)
+                        
+                        if isLast {
+                            completion(self.lastRecognition, analyzedResult)
+                        }
+                    })
                 })
-                
-                completion(self.lastRecognition)
             }
         }
     }

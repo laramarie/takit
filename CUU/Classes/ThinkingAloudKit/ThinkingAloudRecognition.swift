@@ -15,7 +15,7 @@ protocol ThinkingAloudRecognition: Encodable {
     var previousCrumbId: String { get }
     var content: String { get }
     var timestamp: Date { get }
-    var analysis: String { get }
+    var analysis: [String : String] { get }
 }
 
 extension ThinkingAloudRecognition {

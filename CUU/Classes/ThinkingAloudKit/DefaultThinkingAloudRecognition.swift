@@ -14,15 +14,15 @@ struct DefaultThinkingAloudRecognition: ThinkingAloudRecognition {
     let previousCrumbId: String
     let content: String
     let timestamp: Date
-    let analysis: String
+    let analysis: [String : String]
     
-    init(featureId: String, previousCrumbId: String, content: String, analysis: String) {
+    init(featureId: String, previousCrumbId: String, content: String, analysis: [String : String]) {
         self.sessionId = "abcde"
         self.userId = CUUUserManager.sharedManager.userId
         self.featureId = featureId
         self.previousCrumbId = previousCrumbId
         self.content = content
         self.timestamp = Date()
-        self.analysis = "{}"
+        self.analysis = analysis
     }
 }

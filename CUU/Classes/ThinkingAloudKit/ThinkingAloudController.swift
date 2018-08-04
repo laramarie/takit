@@ -113,10 +113,10 @@ class ThinkingAloudController : ThinkingAloudStartViewControllerDelegate, Thinki
     func stopRecording(isLast: Bool) {
         for (index, manager) in recognitionManagers.enumerated() {
             if manager.previousCrumbId == previousCrumbId {
-                manager.stopRecording(isLast: isLast, with: { (result) in
+                manager.stopRecording(isLast: isLast, with: { (result, analyzedResult) in
                     DispatchQueue.main.async {
                         if let previousCrumbId = self.previousCrumbId, let feature = self.currentFeature {
-                            let dataObject = DefaultThinkingAloudRecognition(featureId: String(feature.id), previousCrumbId: previousCrumbId, content: result, analysis: "")
+                            let dataObject = DefaultThinkingAloudRecognition(featureId: String(feature.id), previousCrumbId: previousCrumbId, content: result, analysis: analyzedResult)
                             dataObject.send()
                         }
                         
@@ -199,7 +199,7 @@ class ThinkingAloudController : ThinkingAloudStartViewControllerDelegate, Thinki
     func thinkingAloudIndicatorDidAbortSession() {
         guard let topVC = CUUUtils.getTopViewController() else { return }
         
-        let alert = UIAlertController(title: "Abort current session", message: "Do you really want to stop the current Thinking Aloud session? No data will be sent in this case.", preferredStyle: .alert)
+        let alert = UIAlertController(title: "Session abbrechen", message: "Willst du die aktuelle Feedback Session wirklich abbrechen?", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "No", style: .cancel, handler: { _ in
             // Do nothing.
         }))
