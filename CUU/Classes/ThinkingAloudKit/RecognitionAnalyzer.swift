@@ -30,7 +30,7 @@ class RecognitionAnalyzer {
                 
                 var prediction = ""
                 do {
-                    prediction = try SentenceClassifierTA().prediction(Content: bow(text: token)).Classified
+                    prediction = try SentenceClassifier_TA_1().prediction(Content: bow(text: token)).Classified
                 } catch {
                     print("Error prediction token: " + token)
                 }
