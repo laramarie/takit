@@ -19,7 +19,7 @@ CUU is available through [CocoaPods](http://cocoapods.org). To install
 it, simply add the following line to your Podfile:
 
 ```ruby
-pod 'CUU'
+pod 'CUU', :git => 'git@github.com:laramarie/takit.git', :branch => 'master'
 ```
 
 CUU requires a [`CUU.plist`](Example/CUU/CUU.plist) to be present at build time.
