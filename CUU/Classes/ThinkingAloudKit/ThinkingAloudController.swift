@@ -113,7 +113,7 @@ class ThinkingAloudController : ThinkingAloudStartViewControllerDelegate, Thinki
     }
     
     func stopRecording(isLast: Bool, for crumb: String) {
-        for (index, manager) in recognitionManagers.enumerated() {
+        for manager in recognitionManagers {
             if manager.previousCrumbId == crumb {
                 manager.stopRecording(isLast: isLast, with: { (result, analyzedResult) in
                     DispatchQueue.main.async {
@@ -132,7 +132,7 @@ class ThinkingAloudController : ThinkingAloudStartViewControllerDelegate, Thinki
                         }
                     }
                     // Remove manager from array.
-                    self.recognitionManagers.remove(at: index)
+                    self.recognitionManagers = self.recognitionManagers.filter({ $0.previousCrumbId != crumb })
                 })
                 break
             }
