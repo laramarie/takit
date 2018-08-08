@@ -1,0 +1,12 @@
+
+/* Class = "UIButton"; normalTitle = "Try FeatureKit ActionCrumbs!"; ObjectID = "GeZ-fv-UZC"; */
+"GeZ-fv-UZC.normalTitle" = "Try FeatureKit ActionCrumbs!";
+
+/* Class = "UIButton"; normalTitle = "Go!"; ObjectID = "PwE-Cw-R2r"; */
+"PwE-Cw-R2r.normalTitle" = "Go!";
+
+/* Class = "UIButton"; normalTitle = "Done"; ObjectID = "XAo-mK-SUe"; */
+"XAo-mK-SUe.normalTitle" = "Done";
+
+/* Class = "UINavigationItem"; title = "FeatureKit Example"; ObjectID = "p8Y-Qc-B8i"; */
+"p8Y-Qc-B8i.title" = "FeatureKit Example";

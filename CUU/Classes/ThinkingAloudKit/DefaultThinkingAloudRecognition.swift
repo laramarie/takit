@@ -17,7 +17,7 @@ struct DefaultThinkingAloudRecognition: ThinkingAloudRecognition {
     let analysis: [String : String]
     
     init(featureId: String, previousCrumbId: String, content: String, analysis: [String : String]) {
-        self.sessionId = "abcde"
+        self.sessionId = CUUSessionManager.sharedManager.currentSession
         self.userId = CUUUserManager.sharedManager.userId
         self.featureId = featureId
         self.previousCrumbId = previousCrumbId

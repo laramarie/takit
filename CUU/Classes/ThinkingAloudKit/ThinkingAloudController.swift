@@ -59,7 +59,7 @@ class ThinkingAloudController : ThinkingAloudStartViewControllerDelegate, Thinki
                                 stop()
                                 previousCrumbId = crumbId
                             } else {
-                                stopRecording(isLast: false)
+                                stopRecording(isLast: false, for: previousCrumbId)
                                 previousCrumbId = crumbId
                                 startRecording()
                             }
@@ -83,10 +83,10 @@ class ThinkingAloudController : ThinkingAloudStartViewControllerDelegate, Thinki
         isActive = true
     }
     
-    func stop() {
+    func stop(for crumb: String) {
         animateInOut(animateIn: false)
         
-        self.stopRecording(isLast: true)
+        self.stopRecording(isLast: true, for: crumb)
         
         isActive = false
         
@@ -110,13 +110,13 @@ class ThinkingAloudController : ThinkingAloudStartViewControllerDelegate, Thinki
         }
     }
     
-    func stopRecording(isLast: Bool) {
+    func stopRecording(isLast: Bool, for crumb: String) {
         for (index, manager) in recognitionManagers.enumerated() {
-            if manager.previousCrumbId == previousCrumbId {
+            if manager.previousCrumbId == crumb {
                 manager.stopRecording(isLast: isLast, with: { (result, analyzedResult) in
                     DispatchQueue.main.async {
-                        if let previousCrumbId = self.previousCrumbId, let feature = self.currentFeature {
-                            let dataObject = DefaultThinkingAloudRecognition(featureId: String(feature.id), previousCrumbId: previousCrumbId, content: result, analysis: analyzedResult)
+                        if let feature = self.currentFeature {
+                            let dataObject = DefaultThinkingAloudRecognition(featureId: String(feature.id), previousCrumbId: crumb, content: result, analysis: analyzedResult)
                             dataObject.send()
                         }
                         
@@ -204,7 +204,9 @@ class ThinkingAloudController : ThinkingAloudStartViewControllerDelegate, Thinki
             // Do nothing.
         }))
         alert.addAction(UIAlertAction(title: "Yes", style: .destructive, handler: { _ in
-            self.stop()
+            if let previousCrumbId = self.previousCrumbId {
+               self.stop(for: previousCrumbId)
+            }
         }))
         topVC.present(alert, animated: true, completion: nil)
     }
