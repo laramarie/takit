@@ -56,10 +56,12 @@ class ThinkingAloudController : ThinkingAloudStartViewControllerDelegate, Thinki
                     if let currentFeature = currentFeature {
                         if feature.id == currentFeature.id {
                             if (isLast) {
-                                stop()
+                                guard let id = previousCrumbId else { return }
+                                stop(for: id)
                                 previousCrumbId = crumbId
                             } else {
-                                stopRecording(isLast: false, for: previousCrumbId)
+                                guard let id = previousCrumbId else { return }
+                                stopRecording(isLast: false, for: id)
                                 previousCrumbId = crumbId
                                 startRecording()
                             }
